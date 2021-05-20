@@ -1,20 +1,14 @@
+using System.Linq;
+
 namespace Validator
 {
     public abstract class AbstractValidator<T> : IValidator<T> where T:class
     {
-        protected RuleBuilder<T> RuleBuilder { get; set; } = RuleBuilder<T>.Instance;
+        protected RuleBuilder<T> RuleBuilder { get; } = RuleBuilder<T>.Instance;
 
         public virtual bool Validate(T validating)
         {
-            foreach (var rule in RuleBuilder.Rules)
-            {
-                if (!rule.Validate(validating))
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return RuleBuilder.Rules.All(rule => rule.Validate(validating));
         }
     }
 }

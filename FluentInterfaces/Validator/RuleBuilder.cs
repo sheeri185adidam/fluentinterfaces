@@ -9,13 +9,13 @@ namespace Validator
 
         public static RuleBuilder<T> Instance => new RuleBuilder<T>();
         
-        public RuleBuilder<T> NotNull()
+        public RuleBuilder<T> IsNotNull()
         {
             _rules.Add(new NotNull<T>());
             return this;
         }
 
-        public RuleBuilder<T> EqualsTo(T other)
+        public RuleBuilder<T> IsEqualsTo(T other)
         {
             _rules.Add(new EqualTo<T>(other));
             return this;

@@ -1,18 +1,29 @@
 using System;
+using System.Collections.Generic;
 
 namespace Validator
 {
-    public class EqualTo<T> : AbstractRule<T> where T: class
+    public class EqualTo<T> : AbstractRule<T>
     {
-        private readonly T _other;
-
         public EqualTo(T other)
         {
-            _other = other;
+            Other = other;
+            Comparer = EqualityComparer<T>.Default;
         }
+        
+        public EqualTo(T other, IEqualityComparer<T> comparer)
+        {
+            Other = other;
+            Comparer = comparer ?? throw new ArgumentNullException(nameof(comparer));
+        }
+
+        protected T Other { get; }
+
+        protected IEqualityComparer<T> Comparer { get; }
+
         protected override bool ValidateInternal(T validating)
         {
-            return _other.Equals(validating);
+            return Comparer.Equals(validating, Other);
         }
     }
 }
