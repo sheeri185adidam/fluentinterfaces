@@ -26,4 +26,28 @@ namespace Validator
             return Comparer.Equals(validating, Other);
         }
     }
+    
+    public class EqualTo<T, TProperty> : AbstractRule<T, TProperty>
+    {
+        public EqualTo(string propertyName, TProperty other) : base(propertyName)
+        {
+            Other = other;
+            Comparer = EqualityComparer<TProperty>.Default;
+        }
+        
+        public EqualTo(string propertyName, TProperty other, IEqualityComparer<TProperty> comparer) : base(propertyName)
+        {
+            Other = other;
+            Comparer = comparer ?? throw new ArgumentNullException(nameof(comparer));
+        }
+
+        protected TProperty Other { get; }
+
+        protected IEqualityComparer<TProperty> Comparer { get; }
+        
+        protected override bool ValidateProperty(TProperty validating)
+        {
+            return Comparer.Equals(Other, validating);
+        }
+    }
 }

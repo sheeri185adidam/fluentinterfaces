@@ -11,7 +11,8 @@ namespace Validator
         public StudentValidator()
         {
             RuleBuilder.IsNotNull()
-                .IsNotNull(s => s.Name);
+                .IsNotNull(s => s.Name)
+                .IsEqualTo(s => s.Age, 26);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Validator
             var student = new Student
             {
                 Name = "maniksheeri",
-                Age = 36
+                Age = 26
             };
 
             var validator = new StudentValidator();

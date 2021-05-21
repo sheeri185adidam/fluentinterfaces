@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -37,6 +38,30 @@ namespace Validator
                 _rules[property] = new List<IRule<T>>();
             }
             _rules[property].Add(new NotNull<T, TProperty>(property));
+            return this;
+        }
+
+        public virtual RuleBuilder<T> IsEqualTo(T other)
+        {
+            if (!_rules.ContainsKey(TypeName))
+            {
+                _rules[TypeName] = new List<IRule<T>>();
+            }
+            
+            _rules[TypeName].Add(new EqualTo<T>(other));
+            return this;
+        }
+        
+        public virtual RuleBuilder<T> IsEqualTo<TProperty>(Expression<Func<T, TProperty>> lambda, TProperty other)
+        {
+            var property = GetTPropertyName(lambda);
+            
+            if (!_rules.ContainsKey(property))
+            {
+                _rules[property] = new List<IRule<T>>();
+            }
+            
+            _rules[property].Add(new EqualTo<T, TProperty>(property, other));
             return this;
         }
         
