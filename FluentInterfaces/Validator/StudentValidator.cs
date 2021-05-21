@@ -10,7 +10,8 @@ namespace Validator
     {
         public StudentValidator()
         {
-            RuleBuilder.IsNotNull();
+            RuleBuilder.IsNotNull()
+                .IsNotNull(s => s.Name);
         }
     }
 }
