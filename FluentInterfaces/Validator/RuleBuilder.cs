@@ -6,41 +6,41 @@ using System.Reflection;
 
 namespace Validator
 {
-    public class RuleBuilder<T> where T: class
+    public class RuleBuilder<T>
     {
-        private readonly IDictionary<string, IList<IRule>> _rules = new Dictionary<string, IList<IRule>>();
+        private readonly IDictionary<string, IList<IRule<T>>> _rules = new Dictionary<string, IList<IRule<T>>>();
 
         private string TypeName => typeof(T).ToString();
         
-        public IEnumerable<IRule> Rules => _rules.Values.ToList().SelectMany(r => r);
+        public IEnumerable<IRule<T>> Rules => _rules.Values.ToList().SelectMany(r => r);
 
         public static RuleBuilder<T> Instance => new RuleBuilder<T>();
         
         
-        public RuleBuilder<T> IsNotNull()
+        public virtual RuleBuilder<T> IsNotNull()
         {
             if (!_rules.ContainsKey(TypeName))
             {
-                _rules[TypeName] = new List<IRule>();
+                _rules[TypeName] = new List<IRule<T>>();
             }
             
             _rules[TypeName].Add(new NotNull<T>());
             return this;
         }
 
-        public RuleBuilder<T> IsNotNull<TProperty>(Expression<Func<T, TProperty>> lambda)
+        public virtual RuleBuilder<T> IsNotNull<TProperty>(Expression<Func<T, TProperty>> lambda)
         {
             var property = GetTPropertyName(lambda);
             
             if (!_rules.ContainsKey(property))
             {
-                _rules[property] = new List<IRule>();
+                _rules[property] = new List<IRule<T>>();
             }
-            _rules[property].Add(new NotNull<T, TProperty>());
+            _rules[property].Add(new NotNull<T, TProperty>(property));
             return this;
         }
         
-        protected string GetTPropertyName<TProperty>(Expression<Func<T, TProperty>> lambda)
+        protected virtual string GetTPropertyName<TProperty>(Expression<Func<T, TProperty>> lambda)
         {
             var type = typeof(T);
             if (!(lambda.Body is MemberExpression member))

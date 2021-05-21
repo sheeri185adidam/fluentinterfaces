@@ -1,11 +1,6 @@
 namespace Validator
 {
-    public interface IRule
-    {
-        bool Validate(object validating);
-    }
-    
-    public interface IRule<in T> : IRule
+    public interface IRule<in T>
     {
         bool Validate(T validating);
     }

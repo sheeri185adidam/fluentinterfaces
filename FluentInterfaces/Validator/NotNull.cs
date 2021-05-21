@@ -1,6 +1,6 @@
 namespace Validator
 {
-    public class NotNull<T> : AbstractRule<T> where T: class
+    public class NotNull<T> : AbstractRule<T>
     {
         protected override bool ValidateInternal(T validating)
         {
@@ -8,8 +8,12 @@ namespace Validator
         }
     }
 
-    public class NotNull<T, TProperty> : AbstractRule<T, TProperty> where T : class
+    public class NotNull<T, TProperty> : AbstractRule<T, TProperty>
     {
+        public NotNull(string propertyName) : base(propertyName)
+        {
+        }
+        
         protected override bool ValidateProperty(TProperty validating)
         {
             return validating != null;

@@ -2,7 +2,7 @@ using System.Linq;
 
 namespace Validator
 {
-    public abstract class AbstractValidator<T> : IValidator<T> where T:class
+    public abstract class AbstractValidator<T> : IValidator<T>
     {
         protected RuleBuilder<T> RuleBuilder { get; } = RuleBuilder<T>.Instance;
 
